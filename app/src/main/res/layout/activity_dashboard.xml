@@ -4,13 +4,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#E8F5E9"> <TextView
-    android:id="@+id/tv_welcome"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Welcome!"
-    android:textSize="18sp"
-    android:textColor="#2E7D32"
-    android:textStyle="bold"/>
+    android:background="@drawable/login_background"
+    android:padding="32dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/input_field_background"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/tv_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome!"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You are securely authenticated via Firebase cloud storage."
+            android:textColor="#B3FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </LinearLayout>

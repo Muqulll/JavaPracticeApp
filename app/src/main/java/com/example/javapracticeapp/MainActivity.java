@@ -1,5 +1,6 @@
 package com.example.javapracticeapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +11,17 @@ import android.widget.EditText;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainActivity extends AppCompatActivity{
     private TextView tvstatus;
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
     private int defaultTextColor;
+
+    private FirebaseAuth mAuth ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -28,30 +34,39 @@ public class MainActivity extends AppCompatActivity{
         btnLogin = findViewById(R.id.btn_login);
         defaultTextColor = tvstatus.getCurrentTextColor();
 
+        mAuth = FirebaseAuth.getInstance();
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputUser = etUsername.getText().toString().trim();
-                String inputPass = etPassword.getText().toString().trim();
+                String email = etUsername.getText().toString().trim();
+                String passowrd = etPassword.getText().toString().trim();
 
-                if(inputUser.equals("") || inputPass.equals("")){
+                if(email.equals("") || passowrd.equals("")){
                     tvstatus.setText("Bro Enter Something, Atleast Try");
                     tvstatus.setTextColor(Color.RED);
                     return;
                 }
-                if(inputUser.equals("admin") && inputPass.equals("1234")){
-                    tvstatus.setText("Login Succeful! Welcome.");
-                    tvstatus.setTextColor(Color.GREEN);
+                tvstatus.setText("Checking Credentials Online...");
+                tvstatus.setTextColor(Color.BLUE);
 
-                    android.content.Intent intent = new android.content.Intent(MainActivity.this, DashboardActivity.class);
-                    intent.putExtra("username", inputUser);
-                    startActivity(intent);
-                    finish();
+                mAuth.signInWithEmailAndPassword(email,passowrd).addOnCompleteListener(MainActivity.this, task -> {
+                    if(task.isSuccessful()){
+                        tvstatus.setText("Login Successful!");
+                        tvstatus.setTextColor(Color.GREEN);
 
-                } else {
-                    tvstatus.setText("Wrong Credentials!");
-                    tvstatus.setTextColor(Color.RED);
-                }
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String userEmail = (user != null) ? user.getEmail() : "Developer";
+
+                        Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                        intent.putExtra("username", userEmail);
+                        startActivity(intent);
+                        finish();
+                    } else{
+                        tvstatus.setText("Authentication Failed:" + task.getException().getMessage());
+                        tvstatus.setTextColor(Color.RED);
+                    }
+                });
             }
         });
     }
