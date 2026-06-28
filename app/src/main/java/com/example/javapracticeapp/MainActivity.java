@@ -69,5 +69,16 @@ public class MainActivity extends AppCompatActivity{
                 });
             }
         });
+
+        // Inside onCreate of MainActivity.java:
+        TextView tvGoRegister = findViewById(R.id.tv_go_to_register);
+        tvGoRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                // Note: Do NOT call finish() here, because if they press back, they should return to login!
+            }
+        });
     }
 }
